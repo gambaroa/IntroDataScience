@@ -1,0 +1,36 @@
+---
+title: "Writing scientific reports"
+author: "Antoinette Gambaro"
+date: "(`r format(Sys.time(), '%d %B, %Y')`)"
+output: github_document
+--- 
+
+
+# THE MIND; collaboration game 
+## Can community groups succeed in non-verbal coordination tasks better than isolated(non-community) groups? 
+
+
+# Goal of the experiment 
+The **goal**  Community groups do overall better in a non-verbal coordination task. In a community group, people will be more cooperative and adjust their behavior than in isolated groups
+
+
+## variables
+
+* time to success per round
+* overall time to success
+* overall success rate
+* success rate per round
+
+
+## Picture
+this is the picture of the game 
+
+![](https://image.smythstoys.com/original/mobile/8026362.jpg)
+
+## Data set 
+```{r airmiles}
+library(knitr)
+table(airmiles)
+```
+## References
+Fay, N., Garrod, S., Roberts, L., & Swoboda, N. (2010). The interactive evolution of human communication systems. Cognitive science, 34(3), 351-386​
