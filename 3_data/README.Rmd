@@ -1,0 +1,103 @@
+---
+title: "Data"
+author: "Antoinette Gambaro "
+date: "(`r format(Sys.time(), '%d %B, %Y')`)"
+output: 
+ github_document:
+   toc: TRUE
+---
+
+
+# Dataset 1 `beaver2`
+
+Reynolds (1994) describes a small part of a study of the long-term temperature dynamics of beaver Castor canadensis in north-central Wisconsin. Body temperature was measured by telemetry every 10 minutes for four females, but data from a one period of less than a day for each of two animals is used there.
+
+```{r beaver2}
+library(knitr)
+kable(head(beaver2))
+str(beaver2)
+```
+
+## List of the variables
+
+This data set is composed by **4 variables that are numeric**, thus we are dealing with quantitative data 
+
+* Day
+* Time 
+* Temperature
+* Activity
+
+## Description of the variables 
+
+* **day**: Day of observation (in days since the beginning of 1990) November 3–4 (beaver2).
+* **time**: Time of observation, in the form 0330 for 3:30am
+* **temperature**: Measured body temperature in degrees Celsius
+* **activity**: Indicator of activity outside the retreat
+
+## Reference
+
+P. S. Reynolds (1994) Time-series analyses of beaver body temperatures. Chapter 11 of Lange, N., Ryan, L., Billard, L., Brillinger, D., Conquest, L. and Greenhouse, J. eds (1994) Case Studies in Biometry. New York: John Wiley and Sons.
+
+
+
+# Dataset 2 `death`
+
+Causes of death in France from 2001-2008. Variables include year, gender, cause of death, and number of deaths.
+
+``` {r death}
+library(readr)
+death <- read_csv("~/Desktop/DATA SCIENCE/IntroDataScience/data/death.csv")
+kable(head(death))
+```
+
+## List of the variables: 
+
+* Time 
+* Geo
+* Unit
+* Sex
+* Age 
+* Value
+* ICD10
+
+## Description of the data set
+
+The data set is composed by **8 variables** , only one variables is continuous (TIME), the others are qualitative measure. 
+
+
+
+
+## Reference
+
+**Link**: [EUROSTAT] (http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=hlth_cd_anr&lang=en)
+
+
+
+
+# Dataset 3 `TimeUse`
+
+This data set reports how people spend their time depending on country and sex, with activities such as paid work, household and family care, etc.
+
+``` {r TimeUse}
+library(readr)
+TimeUse <- read_csv("~/Desktop/DATA SCIENCE/IntroDataScience/data/TimeUse.csv")
+kable(head(TimeUse))
+spec(TimeUse)
+```
+## Description of data set 
+
+Since there are 58 variables in the data set, I will say how many variables are qualitative measure and how many are defined as time
+
+
+* **Character**: 10 variables (such as "Free time study", "Tending domestic animals", "Walking the dog", "Computer games",..)
+
+* **Time**; 48 variables (such as  "Personal care", "Sleep", "Eating", "Other and/or unspecified personal care", "Employment",...)
+
+
+## Reference 
+**Link**: [EUROSTAT] (http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=tus_00week&lang=en)
+
+
+
+
+
