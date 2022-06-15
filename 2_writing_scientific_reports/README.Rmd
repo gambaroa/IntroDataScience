@@ -1,0 +1,53 @@
+---
+title: "Writing scientific reports"
+author: "Antoinette Gambaro"
+date: "(`r format(Sys.time(), '%d %B, %Y')`)"
+output: 
+  github_document:
+   toc: true
+---
+
+
+# THE MIND; *collaboration game* 
+Can community groups succeed in non-verbal coordination tasks better than isolated (non-community) groups? 
+
+
+## Goal of the experiment 
+The **goal**  is to see whether the community groups do overall better in a non-verbal coordination task. In a community group, people will be more cooperative and adjust their behavior than in isolated groups
+
+
+## Measurement 
+
+* the overall time it takes the group to move to the next round (time to success per round), 
+*	the overall time it takes the group to succeed the task (overall time to success)
+*	how many tries it took to succeed a round (nb of success/nb of trials) (success rate per round), 
+*	how many tries it took to succeed the task (nb of success/nb of trials overall) (overall success rate) 
+*	the number of times participant “connect” (except the 1st mandatory) during the round (number of connect)
+*	the number of times participant “connect” overall across the game (overall number of connect)
+
+## Variables 
+* **ID (1/2/3)**: identity of the person that is playing 
+* **T (1/2/3/4/5/6)**: trial (coded as 1 or 0 which means if they did trial or not)
+* **C (1/2/3/4/5/6)**: number of connects 
+* **D (1/2/3/4/5/6)**: duration of the trial
+* **G (1/2/3/4/5/6)**: gini coefficient; how much the trial was difficult
+* **TT**: total trial in a round 
+* **DT**: total duration of the round 
+* **RATE**: measure success rate of the round (number of trial divided by 7)
+
+
+## Picture
+below the cover of the game
+
+![](https://image.smythstoys.com/original/mobile/8026362.jpg)
+
+## Data set 
+```{r DATA}
+library(tidyverse)
+library(knitr)
+library(readxl)
+DATA <- read_excel("~/Desktop/DATA SCIENCE/IntroDataScience/data/DATA.xlsx")
+head(kable(DATA))
+```
+## References
+Fay, N., Garrod, S., Roberts, L., & Swoboda, N. (2010). The interactive evolution of human communication systems. Cognitive science, 34(3), 351-386​
