@@ -1,0 +1,101 @@
+---
+title: "Data wrangling"
+author: "Antoinette Gambaro"
+date: "(`r format(Sys.time(), '%d %B, %Y')`)"
+output: 
+  github_document:
+    toc: TRUE
+--- 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+# Data set `muders` from `dslab`: 
+US gun murders by state for 2010, from FBI reports. Also contains the population of each state.
+
+```{r murders, message=FALSE, warning=FALSE}
+library(dslabs)
+data(murders)
+library(dplyr)
+library(tidyverse)
+library(knitr)
+murders %>% head() %>% kable()
+```
+
+## Filter:
+
+Filter the data by **Region**; *South* and *North Central* and  **population** over *1000000*
+
+```{r filter, message=FALSE, warning=FALSE}
+murdersfiltered  <- murders %>%
+  filter(region %in% c("North Central", "South"), population > 1000000)
+murdersfiltered %>% head() %>% kable()
+```
+ 
+## Select: 
+I selected the filtered data frame:  ***state***,***population***, ***total***
+
+```{r select, message= FALSE, warning=FALSE}
+ murderselected <- murdersfiltered  %>%
+  select(state, population, total)
+murderselected %>% print() %>% kable()
+murderselected %>% head() %>% kable()
+murderselected  %>% tail()  %>% kable()
+```
+
+## Arrange:
+I ordered the selected data frame   descendant order by  **population** and then **total** 
+
+```{r arrange}
+library(knitr)
+murderselected <- murderselected %>% 
+  arrange(desc(population), total) 
+murderselected %>% head() %>% kable()
+```
+
+## Observation:
+We can see from this data frame, that in North Central and South of US, **Texas** has the most amount of murder compared the other state, also because it has  **bigger population**. However **Ohio** ,which is the fourth biggest state in terms of population, shows **fewer numbers** of murders  compared to the other state that are smaller. 
+
+
+## Summarize: 
+to get insight from the data, I grouped by regions: ***South*** and ***North Central***
+```{r summarize, message= FALSE, warning=FALSE}
+summarizemurders  <- murdersfiltered %>%
+  group_by(region) %>%
+  summarize(average_total=mean(total, na.rm=TRUE), sd_total= sd(total, na.rm=TRUE)) %>%
+arrange(average_total)
+summarizemurders %>% print() %>% kable()
+```
+
+### *Observation*: 
+By comparing South and North Central states we can see that in the **South there is a higher rate of murders overall.** 
+
+* **South**: 270
+* **North  Central**:  181
+
+## Removing NA:
+
+```{r NA, message= FALSE, warning=FALSE}
+cleanmurders <- na.omit(murders)
+str(cleanmurders)
+```
+By using the function to remove the NA from the original data, we can see that there are no changes, the number of observation remained the same, thus there is no NA in the original data frame. 
+
+
+## Joining 2 datasets:  `results_us_election_2016` and `murders`
+
+Joining from dslabs` package, `results_us_election_2016` and `murders`:
+
+```{r join, message= FALSE, warning=FALSE}
+joineddata<-full_join(results_us_election_2016, murders)
+head(kable(joineddata))
+```
+
+It would interesting seeing whether people who come from a specif region are more prone to vote Trump or Clinton, thus if there is a significant difference in the votes,  by controlling for the region. 
+I would group the data by region, and summarize the average  and the standard deviation of votes for Clinton and Trump. 
+
+
+
+
