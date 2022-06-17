@@ -1,0 +1,106 @@
+---
+title: "Data Visualization "
+author: "Antoinette Gambaro"
+date: "(`r format(Sys.time(), '%d %B, %Y')`)"
+output: 
+  github_document:
+    toc: TRUE 
+--- 
+# Data `gapminder` from `dslabs`
+
+This data set reports health and income outcomes of 184 countries from 1960 to 2016. 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+
+```{r packages, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(knitr)
+library(dslabs)
+data("gapminder")
+```
+
+## Description of the data set `gapminder`
+
+* Country
+* Year
+* Infant_mortality (deaths per 1000)
+* Life_expectancy (in years)
+* Fertility. (Average no of children per woman)
+* Population
+* Gpd
+* Continent
+* Region
+
+```{r }
+str(gapminder)
+```
+## Description of the variables 
+
+The data frame contain *10545 observation* of *9 variables* 
+
+* **factors**: Country, Continent, Region
+* **numeric**: Infant_mortality, life_expectancy , Fertility, Population, Gpd. 
+* **integer**; Year 
+
+## LONG FORMAT 
+
+Data set trasformed into a  *long format* 
+```{r long}
+gapminder_long <- gapminder %>% 
+  pivot_longer(c("infant_mortality", "life_expectancy", "fertility", "population", "gdp"), names_to = "variable")
+gapminder_long %>% head() %>% kable()
+```
+## UNION 
+
+Union of *content* and *region*
+
+```{r unite}
+gapminder_long <- gapminder_long %>% 
+  unite(cont_region, continent, region)
+gapminder_long %>% head() %>% kable()
+```
+## SEPARATION
+
+Separating  *content* and *region*
+
+```{r separate}
+gapminder_long <- gapminder_long %>% 
+  separate(cont_region, into=c("continent", "region"), sep="_")
+gapminder_long %>% head() %>% kable()
+```
+
+
+## PLOT 
+
+Infant *mortality* vs *fertility* 
+
+```{r plot, warning=FALSE}
+library(ggplot2)
+ggplot(gapminder, aes(infant_mortality, fertility)) +
+  geom_point(alpha= 1/10, color= "blue", size= 1, na.rm= TRUE) +
+  xlab(label = "Infant Mortality")+
+  ylab(label= "Fertility Rate") +
+  ggtitle(label= " Infant Mortality vs Fertility Rate") +
+  geom_smooth(method= "lm", se= FALSE, color=" red")
+```
+
+From the Plot we can see that there could be a positive correlation between *Infant Mortality* and *Fertility Rate*
+
+
+So, let's check whether there is this correlation!
+```{r correlation}
+res <-cor.test(gapminder$infant_mortality, gapminder$fertility, method= "pearson")
+res$estimate
+```
+
+## References
+
+Irizarry, Rafael A., and Amy Gill. 2021. Dslabs: Data Science Labs. https://CRAN.R-project.org/package=dslabs.
+
+
+
+
