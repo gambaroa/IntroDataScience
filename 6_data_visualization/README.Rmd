@@ -1,0 +1,105 @@
+---
+title: "Data Visualization"
+author: "Antoinette Gambaro "
+date: "(`r format(Sys.time(), '%d %B, %Y')`)"
+output: 
+  github_document:
+    toc: TRUE 
+---
+
+# Data `gapminder` from `dslabs`:
+
+This data set reports health and income outcomes of 184 countries from 1960 to 2016. 
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+
+```{r packages, message=FALSE, warning=FALSE}
+install.packages('dslab', repos = "http://cran.us.r-project.org")
+library(dslabs)
+library(ggplot2)
+library(tidyverse)
+library(knitr)
+library(magrittr)
+library(dplyr)
+install.packages('ggthemes', repos = "http://cran.us.r-project.org")
+library(ggthemes)
+library(ggrepel)
+data("gapminder")
+```
+
+
+## Description of the data set `gapminder`
+
+* Country
+* Year
+* Infant_mortality (deaths per 1000)
+* Life_expectancy (in years)
+* Fertility. (Average no of children per woman)
+* Population
+* Gpd
+* Continent
+* Region
+
+```{r }
+head(kable(gapminder))
+```
+## Description of the variables 
+the data frame contain *10545 observation* of *9 variables* 
+
+* **factors**: Country, Continent, Region
+* **numeric**: Infant_mortality, life_expectancy , Fertility, Population, Gpd. 
+* **integer**; Year 
+
+
+## First question
+
+*Which is the continent that has the lowest life expectancy?*
+
+First of all, I want to visualize the data to see the level of life expectancy in the different continents
+
+
+```{r plot, warning= FALSE }
+ggplot(gapminder, aes(continent,life_expectancy, fill=continent)) +
+  geom_boxplot(outlier.colour="red") +
+  xlab(label=" Continents") +
+  ylab(label=" Life Expectancy") +
+  ggtitle(label= "Life Expectancy in different Continents")
+
+```
+
+We can see from the box plot that the continent with the lowest life expectancy is *Africa*, whereas the rest of the continent show similar level, however Europe is slightly higher compared *America*, *Asia* and *Oceania*. 
+
+
+## Second question 
+*Is there a relationship between the the distribution of fertility and infant mortality in Africa?*
+
+Since *Africa*  has the lowest level of life expectancy, I want to deep in and see the distribution infant mortality (which could be have an impact on the rate of life expectancy) in the different *region of Africa*
+
+
+```{r susbset Africa }
+
+Africa <- subset(gapminder,continent == "Africa")
+ggplot(Africa, aes(infant_mortality, fill=region)) +
+
+  geom_histogram(position = "identity")+
+  stat_bin(bins = 30) +
+   xlab(label= "Infant Mortality" ) +
+  ylab(label="Frequency") +
+  ggtitle(label= "Infant Mortality distribution in different regions of Africa")
+  
+```
+
+From the histogram we can see that the infant mortality is high especially in Eastern Africa, maybe this region could be a great contributor to the fact that Africa shows a lower life expectancy compared to the other continent. 
+
+
+## Reference
+
+Irizarry, Rafael A., and Amy Gill. 2021. Dslabs: Data Science Labs. https://CRAN.R-project.org/package=dslabs.
+
+
