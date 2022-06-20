@@ -1,0 +1,139 @@
+---
+title: "Linear Models I"
+author: "Antoinette Gambaro "
+date: "(`r format(Sys.time(), '%d %B, %Y')`)"
+output: 
+  github_document:
+   toc: true
+---
+
+
+
+# Data `gapminder` from `dslabs`:
+This data set reports health and income outcomes of 184 countries from 1960 to 2016. 
+
+
+```{r packages,  message=FALSE,warning= FALSE}
+library(tidyverse)
+library(knitr)
+library(dslabs)
+data("gapminder")
+```
+
+## Description of the data set `gapminder`
+
+* Country
+* Year
+* Infant_mortality (deaths per 1000)
+* Life_expectancy (in years)
+* Fertility. (Average no of children per woman)
+* Population
+* Gpd
+* Continent
+* Region
+
+```{r }
+
+str(gapminder,  message=FALSE,warning= FALSE)
+```
+
+## Description of the variables 
+the data frame contain *10545 observation* of *9 variables* 
+
+* **factors**: Country, Continent, Region
+* **numeric**: Infant_mortality, life_expectancy , Fertility, Population, Gpd. 
+* **integer**; Year 
+
+## Correlation
+
+I want to create a linear model where fertility is the explanatory variable and the population is the response variable  in Italy 
+
+* **infant mortality** : explanatory variable
+* **life expectancy** : response variable
+
+let's check whether there is a correlation between this  2 variables
+
+```{r subset,  message=FALSE,warning= FALSE}
+Italy60 <- subset(gapminder, country == "Italy")
+datait<-as.data.frame(Italy60)
+
+```
+
+```{r cor,  message=FALSE,warning= FALSE }
+cor(Italy60$infant_mortality,Italy60$life_expectancy,use= "pairwise.complete.obs")
+```
+The results indicate that there is a high negative correlation. In other words, as infant mortality increases, life expectancy decreases. 
+
+## Fitting model 
+
+```{r model,  message=FALSE,warning= FALSE }
+model <-lm(infant_mortality ~ life_expectancy, datait)
+summary(model)
+library(ggplot2)
+ggplot(datait, aes(infant_mortality, life_expectancy)) +
+  geom_point(size=0.5, aplha= 0.4,) +
+ geom_smooth(method = "lm", se= FALSE) +
+ theme_classic()
+```
+From the Plot we can see that there is no linear model since the line curve a little. 
+so I decided to perform a Logarithmic transformation which is a convenient means of transforming a highly skewed variable into a more normalized dataset. When modeling variables with non-linear relationships, the chances of producing errors may also be skewed negatively.
+
+## Logarithmic transformation
+```{r logmodel,  message=FALSE,warning= FALSE}
+loginfant<-log(datait$infant_mortality)
+loglife<-log(datait$life_expectancy)
+logmodel <-lm(loginfant ~ loglife, datait)
+summary(logmodel)
+library(ggplot2)
+??glm
+ggplot(datait, aes(loginfant, loglife)) +
+  geom_point(size=2, aplha= 1) +
+ geom_smooth(method = "lm", se= TRUE) +
+ theme_classic()
+```
+As expected now the relation seem to be more linear compared to the original variables.
+
+## Checking assumptions 
+
+* Linearity of Data
+* Homogeneity of variance
+* Normality in residuals
+
+### Linearity of Data
+``` {r linearityassump, message=FALSE,warning= FALSE }
+plot(logmodel, 1)
+```
+
+
+Seem from this plot that there is no linear relation between the variables 
+
+### Homogeneity of variance
+
+``` {r assumption, message=FALSE,warning= FALSE }
+plot(logmodel, 3)
+library(lmtest)
+library(zoo)
+resbp<-bptest(logmodel)
+resbp
+```
+
+The results from the *Breusch-Pagan test* indicates that the P value is very small (0.007302867) ,it tests whether the variance of the errors from a regression is dependent on the values of the independent variables. In that case, heteroskedasticity is present. since one assumption of linear model is that heteroskedasticity must be absent. we can conclude that the assumption of homoskedasticity is violated. 
+
+### Normality of the residuals
+
+``` {r assumptionnorm, message=FALSE,warning= FALSE}
+plot(model, 2)
+```
+
+
+In this case , all the points fall approximately along this reference line, so we can assume normality. 
+
+
+
+
+
+
+
+
+
+
